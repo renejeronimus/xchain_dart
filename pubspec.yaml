@@ -1,0 +1,27 @@
+name: xchain_dart
+description: Lightweight Dart library for cross-chain wallets.
+version: 0.0.1
+homepage: https://github.com/renejeronimus/xchain_dart
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  bip39: ^1.0.6
+  dart_bip32_bip44: ^0.2.0
+  http: ^0.13.3
+  pointycastle: ^3.5.0
+  uuid: ^3.0.1
+  web3dart: ^2.3.3
+  bitcoin_dart:
+    git:
+      url: https://github.com/renejeronimus/bitcoin_dart
+      ref: master
+
+
+dependency_overrides:
+
+dev_dependencies:
+  test: ^1.17.10
+
