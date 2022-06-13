@@ -1,6 +1,5 @@
 import 'package:test/test.dart';
-import 'package:xchain_dart/src/xchain_bitcoin/bitcoin_client.dart';
-import 'package:xchain_dart/src/xchain_client/xchain_client.dart';
+import 'package:xchain_dart/xchaindart.dart';
 
 void main() {
   // https://iancoleman.io/bip39/
