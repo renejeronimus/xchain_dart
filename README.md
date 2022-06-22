@@ -1,6 +1,6 @@
 # xchain_dart
 
-Lightweight Dart library for cross-chain wallets.
+Lightweight Dart library for wallet apps.
 
 ## Getting Started
 

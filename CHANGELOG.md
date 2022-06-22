@@ -1,3 +1,9 @@
+## 1.0.1
+
+- Implemented validateAddress function.
+- Removed optional network argument in XChainClient constructor.
+- Changed network type from String to NetworkType.
+
 ## 1.0.0
 
 - Bitcoin client.

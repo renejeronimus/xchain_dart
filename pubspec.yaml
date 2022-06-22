@@ -1,6 +1,6 @@
 name: xchain_dart
-description: Lightweight Dart library for cross-chain wallets.
-version: 1.0.0
+description: Lightweight Dart library for wallet apps.
+version: 1.0.1
 homepage: https://github.com/renejeronimus/xchain_dart
 
 environment:
@@ -18,9 +18,6 @@ dependencies:
     git:
       url: https://github.com/renejeronimus/bitcoin_dart
       ref: master
-
-
-dependency_overrides:
 
 dev_dependencies:
   test: ^1.17.10

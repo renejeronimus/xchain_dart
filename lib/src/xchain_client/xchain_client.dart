@@ -1,10 +1,12 @@
+import 'package:bitcoin_dart/bitcoin_flutter.dart';
+
 abstract class XChainClient {
   late String address;
-  late String network;
+  late NetworkType network;
   late bool readOnlyClient;
   late String seed;
 
-  XChainClient({this.network = 'mainnet'});
+  XChainClient();
 
   getAddress(walletIndex) {}
 

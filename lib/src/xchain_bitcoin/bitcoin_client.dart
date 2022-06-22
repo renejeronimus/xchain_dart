@@ -11,7 +11,7 @@ class BitcoinClient implements XChainClient {
   late String address;
 
   @override
-  late String network;
+  NetworkType network = bitcoin;
 
   @override
   late bool readOnlyClient;
@@ -23,13 +23,13 @@ class BitcoinClient implements XChainClient {
 
   static const _denominator = 100000000;
 
-  BitcoinClient(this.seed, {this.network = 'mainnet'}) {
+  BitcoinClient(this.seed) {
     readOnlyClient = false;
     int walletIndex = 0;
     address = getAddress(walletIndex);
   }
 
-  BitcoinClient.readonly(this.address, {this.network = 'mainnet'}) {
+  BitcoinClient.readonly(this.address) {
     readOnlyClient = true;
     address = this.address;
   }
@@ -46,7 +46,7 @@ class BitcoinClient implements XChainClient {
     final address;
 
     // BIP84 (BIP44 for native segwit)
-    if (network == 'testnet') {
+    if (network == testnet) {
       final node = root.derivePath("m/84'/1'/0'/0/$walletIndex");
       address = P2WPKH(
               data: new PaymentData(pubkey: node.publicKey), network: testnet)
@@ -92,9 +92,9 @@ class BitcoinClient implements XChainClient {
 
   @override
   getExplorerUrl() {
-    if (network == 'mainnet') {
+    if (network == bitcoin) {
       return 'https://blockstream.info/api';
-    } else if (network == 'testnet') {
+    } else if (network == testnet) {
       return 'https://blockstream.info/testnet/api';
     } else {
       throw ArgumentError('Unsupported network');
@@ -299,8 +299,7 @@ class BitcoinClient implements XChainClient {
 
   @override
   validateAddress(address) {
-    // check validity of address
-    bool result = true;
+    bool result = Address.validateAddress(address, network);
     return result;
   }
 }

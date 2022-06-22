@@ -1,3 +1,4 @@
+import 'package:bitcoin_dart/bitcoin_flutter.dart';
 import 'package:test/test.dart';
 import 'package:xchain_dart/xchaindart.dart';
 
@@ -27,20 +28,16 @@ void main() {
     });
     test('get default network', () {
       var networkType = client.getNetwork();
-      expect(networkType, 'mainnet');
+      expect(networkType, bitcoin);
     });
     test('set testnet network', () {
-      client.setNetwork('testnet');
+      client.setNetwork(testnet);
       var networkType = client.getNetwork();
-      expect(networkType, 'testnet');
-      expect(client.address, addrPath1);
-    });
-    test('set testnet client', () {
-      client = BitcoinClient(phrase, network: 'testnet');
-      expect(client.getNetwork(), 'testnet');
+      expect(networkType, testnet);
       expect(client.address, addrPath1);
     });
     test('set phrase', () {
+      client.setNetwork(testnet);
       String address = client.setPhrase(phrase, 0);
       expect(address, addrPath1);
     });
@@ -102,6 +99,13 @@ void main() {
       bool asset = tx.containsValue('BTC.BTC');
       expect(asset, true);
       expect(transactions.length, 3);
+    });
+  });
+
+  group('check for address validity', () {
+    XChainClient client = new BitcoinClient.readonly(addrPath4);
+    test('check default address', () async {
+      expect(client.validateAddress(client.address), true);
     });
   });
 }
