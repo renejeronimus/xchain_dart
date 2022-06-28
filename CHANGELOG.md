@@ -1,3 +1,7 @@
+## 1.0.2
+
+- Validating testnet address on read-only client.
+
 ## 1.0.1
 
 - Implemented validateAddress function.

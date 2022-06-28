@@ -107,5 +107,12 @@ void main() {
     test('check default address', () async {
       expect(client.validateAddress(client.address), true);
     });
+    test('check native SegWit (P2WPKH) address', () async {
+      expect(client.validateAddress(addrPath2), true);
+    });
+    test('check native SegWit (P2WPKH) testnet address', () async {
+      client.setNetwork(testnet);
+      expect(client.validateAddress(addrPath1), true);
+    });
   });
 }

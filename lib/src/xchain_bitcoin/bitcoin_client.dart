@@ -280,7 +280,9 @@ class BitcoinClient implements XChainClient {
   @override
   setNetwork(newNetwork) {
     network = newNetwork;
-    address = getAddress(0);
+    if (readOnlyClient == false) {
+      address = getAddress(0);
+    }
   }
 
   @override
