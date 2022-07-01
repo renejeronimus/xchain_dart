@@ -2,6 +2,7 @@
 
 - Validating testnet address on read-only client.
 - Fixed issue on retrieving transaction history of coinbase transactions.
+- Added missing hash field.
 
 ## 1.0.1
 

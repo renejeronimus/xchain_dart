@@ -203,7 +203,7 @@ class BitcoinClient implements XChainClient {
 
     for (var _rawTx in _rawTxs) {
       var _confirmed = _rawTx['status']['confirmed'];
-      var _hash = _rawTx['status']['block_hash'];
+      String _txid = _rawTx['txid'];
       var _date = DateTime.now();
       if (_confirmed == true) {
         var _epoch = _rawTx['status']['block_time'];
@@ -260,7 +260,7 @@ class BitcoinClient implements XChainClient {
         'to': _to,
         'date': _date,
         'type': "transfer",
-        'hash': _hash,
+        'txid': _txid,
         'confirmed': _confirmed,
       });
     }
