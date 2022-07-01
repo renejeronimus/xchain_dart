@@ -100,6 +100,15 @@ void main() {
       expect(asset, true);
       expect(transactions.length, 3);
     });
+    test('get all tx history from miner on testnet', () async {
+      client.setNetwork(testnet);
+      List transactions = await client.getTransactions(
+          'tb1qsgx55dp6gn53tsmyjjv4c2ye403hgxynxs0dnm', 1);
+      Map tx = transactions.first;
+      bool asset = tx.containsValue('BTC.BTC');
+      expect(asset, true);
+      expect(transactions.length, 1);
+    });
   });
 
   group('check for address validity', () {

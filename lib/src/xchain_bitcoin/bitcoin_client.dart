@@ -216,20 +216,22 @@ class BitcoinClient implements XChainClient {
         Map _txMap = tx;
         _txMap.forEach((key, value) {
           if (key == 'prevout') {
-            Map _prevoutMap = value;
-            late String _address;
-            late double _amount;
-            _prevoutMap.forEach((subkey, subvalue) {
-              if (subkey == 'scriptpubkey_address') {
-                _address = subvalue;
+            Map _prevoutMap = value ?? {};
+            if (_prevoutMap.isNotEmpty) {
+              String _address = '';
+              double _amount = 0.0;
+              _prevoutMap.forEach((subkey, subvalue) {
+                if (subkey == 'scriptpubkey_address') {
+                  _address = subvalue;
+                }
+                if (subkey == 'value') {
+                  _amount = subvalue / _denominator;
+                }
+              });
+              if (_address.isNotEmpty) {
+                var _map = {'address': _address, 'amount': _amount};
+                _from.add(_map);
               }
-              if (subkey == 'value') {
-                _amount = subvalue / _denominator;
-              }
-            });
-            if (_address.isNotEmpty) {
-              var _map = {'address': _address, 'amount': _amount};
-              _from.add(_map);
             }
           }
         });
@@ -238,8 +240,8 @@ class BitcoinClient implements XChainClient {
       List<Map> _to = [];
       _rawTx['vout'].forEach((tx) {
         Map _txMap = tx;
-        late String _address;
-        late double _amount;
+        String _address = '';
+        double _amount = 0.0;
         _txMap.forEach((key, value) {
           if (key == 'scriptpubkey_address') {
             _address = value;
@@ -248,10 +250,8 @@ class BitcoinClient implements XChainClient {
             _amount = value / _denominator;
           }
         });
-        if (_address.isNotEmpty) {
-          var _map = {'address': _address, 'amount': _amount};
-          _to.add(_map);
-        }
+        var _map = {'address': _address, 'amount': _amount};
+        _to.add(_map);
       });
 
       _txData.add({

@@ -1,6 +1,7 @@
 ## 1.0.2
 
 - Validating testnet address on read-only client.
+- Fixed issue on retrieving transaction history of coinbase transactions.
 
 ## 1.0.1
 
