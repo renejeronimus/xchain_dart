@@ -202,63 +202,85 @@ class BitcoinClient implements XChainClient {
 
   @override
   getTransactions(address, [limit]) async {
-    List _txData = [];
-    String _uri = '${getExplorerAddressUrl(address)}/txs';
-    String _responseBody = await _networkHelper.getData(_uri);
-    List _rawTxs = jsonDecode(_responseBody);
+    String _addressUri = '${getExplorerAddressUrl(address)}';
+    String _addrResponseBody = await _networkHelper.getData(_addressUri);
+    var _rawAddressStats = jsonDecode(_addrResponseBody);
 
-    for (var _rawTx in _rawTxs) {
-      var _confirmed = _rawTx['status']['confirmed'];
-      String _txid = _rawTx['txid'];
-      var _date = DateTime.now();
-      if (_confirmed == true) {
-        var _epoch = _rawTx['status']['block_time'];
-        _date = new DateTime.fromMillisecondsSinceEpoch(_epoch * 1000,
-            isUtc: false);
+    // Retrieve the number of transactions for an address.
+    int _txCount = _rawAddressStats['chain_stats']['tx_count'] ?? 0;
+
+    // Blockstream api limits tx results to 25 per page.
+    int _pages = (_txCount / 25).ceil();
+
+    // Avoid retrieving more data then explicitly requested.
+    if (limit != null) {
+      int _limit = (limit / 25).ceil();
+      if (_limit < _pages) {
+        _pages = _limit;
       }
+    }
 
-      List<Map> _from = [];
-      _rawTx['vin'].forEach((tx) {
-        Map _txMap = tx;
-        _txMap.forEach((key, value) {
-          if (key == 'prevout') {
-            Map _prevoutMap = value ?? {};
-            if (_prevoutMap.isNotEmpty) {
-              String _address = '';
-              double _amount = 0.0;
-              _prevoutMap.forEach((subkey, subvalue) {
-                if (subkey == 'scriptpubkey_address') {
-                  _address = subvalue;
+    List _txData = [];
+    String _lastTx = '';
+
+    for (int i = 0; i < _pages; i++) {
+      String _txUri = '$_addressUri/txs/chain/$_lastTx';
+      String _txResponseBody = await _networkHelper.getData(_txUri);
+      var _rawTxs = jsonDecode(_txResponseBody);
+      _lastTx = _rawTxs.last['txid'];
+
+      for (var _rawTx in _rawTxs) {
+        var _confirmed = _rawTx['status']['confirmed'];
+        String _txid = _rawTx['txid'];
+        var _date = DateTime.now();
+        if (_confirmed == true) {
+          var _epoch = _rawTx['status']['block_time'];
+          _date = new DateTime.fromMillisecondsSinceEpoch(_epoch * 1000,
+              isUtc: false);
+        }
+
+        List<Map> _from = [];
+        _rawTx['vin'].forEach((tx) {
+          Map _txMap = tx;
+          _txMap.forEach((key, value) {
+            if (key == 'prevout') {
+              Map _prevoutMap = value ?? {};
+              if (_prevoutMap.isNotEmpty) {
+                String _address = '';
+                double _amount = 0.0;
+                _prevoutMap.forEach((subkey, subvalue) {
+                  if (subkey == 'scriptpubkey_address') {
+                    _address = subvalue;
+                  }
+                  if (subkey == 'value') {
+                    _amount = subvalue / _denominator;
+                  }
+                });
+                if (_address.isNotEmpty) {
+                  var _map = {'address': _address, 'amount': _amount};
+                  _from.add(_map);
                 }
-                if (subkey == 'value') {
-                  _amount = subvalue / _denominator;
-                }
-              });
-              if (_address.isNotEmpty) {
-                var _map = {'address': _address, 'amount': _amount};
-                _from.add(_map);
               }
             }
-          }
+          });
         });
-      });
 
-      List<Map> _to = [];
-      _rawTx['vout'].forEach((tx) {
-        Map _txMap = tx;
-        String _address = '';
-        double _amount = 0.0;
-        _txMap.forEach((key, value) {
-          if (key == 'scriptpubkey_address') {
-            _address = value;
-          }
-          if (key == 'value') {
-            _amount = value / _denominator;
-          }
+        List<Map> _to = [];
+        _rawTx['vout'].forEach((tx) {
+          Map _txMap = tx;
+          String _address = '';
+          double _amount = 0.0;
+          _txMap.forEach((key, value) {
+            if (key == 'scriptpubkey_address') {
+              _address = value;
+            }
+            if (key == 'value') {
+              _amount = value / _denominator;
+            }
+          });
+          var _map = {'address': _address, 'amount': _amount};
+          _to.add(_map);
         });
-        var _map = {'address': _address, 'amount': _amount};
-        _to.add(_map);
-      });
 
         String _asset;
         network == testnet ? _asset = 'tBTC' : _asset = 'BTC';
