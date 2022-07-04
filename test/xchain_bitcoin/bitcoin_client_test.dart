@@ -105,7 +105,7 @@ void main() {
       List transactions = await client.getTransactions(
           'tb1qsgx55dp6gn53tsmyjjv4c2ye403hgxynxs0dnm', 1);
       Map tx = transactions.first;
-      bool asset = tx.containsValue('BTC.BTC');
+      bool asset = tx.containsValue('BTC.tBTC');
       expect(asset, true);
       expect(transactions.length, 1);
     });

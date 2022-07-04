@@ -70,13 +70,16 @@ class BitcoinClient implements XChainClient {
     num funded = jsonDecode(responseBody)['chain_stats']['funded_txo_sum'];
     num spend = jsonDecode(responseBody)['chain_stats']['spent_txo_sum'];
     num amount = (funded - spend) / _denominator;
-    if (amount != null) {
-      balances.add({
-        'asset': 'BTC.BTC',
-        'amount': amount,
-        'image': 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png'
-      });
-    }
+
+    String _asset;
+    network == testnet ? _asset = 'tBTC' : _asset = 'BTC';
+
+    balances.add({
+      'asset': 'BTC.$_asset',
+      'amount': amount,
+      'image': 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png'
+    });
+
     return balances;
   }
 
@@ -180,9 +183,12 @@ class BitcoinClient implements XChainClient {
       }
     });
 
+    String _asset;
+    network == testnet ? _asset = 'tBTC' : _asset = 'BTC';
+
     if (_rawTx != null) {
       _txData.addAll({
-        'asset': 'BTC.BTC',
+        'asset': 'BTC.$_asset',
         'from': _from,
         'to': _to,
         'date': _date,
@@ -254,15 +260,19 @@ class BitcoinClient implements XChainClient {
         _to.add(_map);
       });
 
-      _txData.add({
-        'asset': 'BTC.BTC',
-        'from': _from,
-        'to': _to,
-        'date': _date,
-        'type': "transfer",
-        'txid': _txid,
-        'confirmed': _confirmed,
-      });
+        String _asset;
+        network == testnet ? _asset = 'tBTC' : _asset = 'BTC';
+
+        _txData.add({
+          'asset': 'BTC.$_asset',
+          'from': _from,
+          'to': _to,
+          'date': _date,
+          'type': "transfer",
+          'txid': _txid,
+          'confirmed': _confirmed,
+        });
+      }
     }
 
     if (limit == null) {
