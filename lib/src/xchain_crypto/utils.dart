@@ -81,6 +81,10 @@ _identifyChain(String address, [String? prefix]) {
   else if (address.startsWith(new RegExp(r'(^bc1[A-z,0-9]{39})'))) {
     _addresses.add(AssetAddress(address, 'BTC.BTC', 'mainnet'));
   }
+  // Bitcoin Native-Segwit testnet address starts with tb1 and has 42 characters
+  else if (address.startsWith(new RegExp(r'(^tb1[A-z,0-9]{39})'))) {
+    _addresses.add(AssetAddress(address, 'BTC.tBTC', 'testnet'));
+  }
   // Bitcoin Cash address starts with q and has 42 characters
   else if (address.startsWith(new RegExp(r'(^q[A-z,0-9]{41})'))) {
     _addresses.add(AssetAddress(address, 'BCH.BCH', 'mainnet'));

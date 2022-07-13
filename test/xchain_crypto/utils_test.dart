@@ -62,8 +62,8 @@ void main() {
     expect(addresses.first.networkType, 'mainnet');
   });
 
-  test('starts with dragonsdex chain prefix', () {
-    String source = 'dragonsdex:0xC52A857FDa38994CB6CC8e0DE2AEDD67a7353e0d';
+  test('starts with unsupported chain prefix', () {
+    String source = 'unsupported:0xC52A857FDa38994CB6CC8e0DE2AEDD67a7353e0d';
     List<AssetAddress> addresses = [];
     try {
       addresses = substractAddress(source);
@@ -111,6 +111,16 @@ void main() {
         addresses.first.address, 'bc1qfw00pnu77vvw3r8fpterjukx0u3nj26n724pq3');
     expect(addresses.first.asset, 'BTC.BTC');
     expect(addresses.first.networkType, 'mainnet');
+  });
+
+  test('bitcoin native segwit testnet address without chain prefix', () {
+    String source = 'tb1qfcx8ek6y869l3y2nqfvtrdtz9zjls56cnhuyv4';
+    List<AssetAddress> addresses = substractAddress(source);
+    expect(addresses.length, 1);
+    expect(
+        addresses.first.address, 'tb1qfcx8ek6y869l3y2nqfvtrdtz9zjls56cnhuyv4');
+    expect(addresses.first.asset, 'BTC.tBTC');
+    expect(addresses.first.networkType, 'testnet');
   });
 
   test('ethereum address without chain prefix', () {
