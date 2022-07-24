@@ -1,4 +1,4 @@
-import 'package:bitcoin_dart/bitcoin_flutter.dart';
+import 'package:bitcoin_dart/bitcoin_dart.dart';
 
 abstract class XChainClient {
   late String address;

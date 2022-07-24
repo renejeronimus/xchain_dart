@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:bitcoin_dart/bitcoin_flutter.dart';
+import 'package:bitcoin_dart/bitcoin_dart.dart';
 
 import '../../xchaindart.dart';
 

@@ -1,4 +1,4 @@
-import 'package:bitcoin_dart/bitcoin_flutter.dart';
+import 'package:bitcoin_dart/bitcoin_dart.dart';
 import 'package:test/test.dart';
 import 'package:xchain_dart/xchaindart.dart';
 
